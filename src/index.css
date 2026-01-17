@@ -1,38 +1,24 @@
 @import "tailwindcss";
 
-/* 1. CONFIGURATION THEME (TAILWIND V4) */
 @theme {
-  --color-palapa-black: #111111;
-  --color-palapa-pink: #e782a9;
-  --color-palapa-pink-soft: #fff0f5;
-  --color-palapa-gray: #f9fafb;
-  --color-palapa-text: #374151;
-
-  --font-playfair: "Playfair Display", serif;
-  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+  --color-palapa-rose: #b17a87;
+  --color-palapa-petal: #e3a9b4;
+  --color-palapa-cream: #f6e6e8;
+  --font-poppins: "Poppins", sans-serif;
 }
 
-/* 2. IMPORT GOOGLE FONTS */
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
-
-/* 3. BASE STYLES */
-html {
-  scroll-behavior: smooth;
-}
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
 body {
+  background-color: var(--color-palapa-cream);
+  font-family: var(--font-poppins);
   margin: 0;
-  padding: 0;
-  /* Menggunakan variabel yang sudah dibuat di @theme */
-  background-color: var(--color-palapa-gray);
-  color: var(--color-palapa-text);
-  font-family: var(--font-jakarta);
-  line-height: 1.5;
-  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Memastikan gambar tidak keluar dari container */
-img {
-  max-width: 100%;
-  display: block;
+/* Haluskan seleksi teks agar senada dengan brand */
+::selection {
+  background-color: var(--color-palapa-rose);
+  color: white;
 }
