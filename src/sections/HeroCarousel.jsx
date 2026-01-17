@@ -21,23 +21,23 @@ const HeroCarousel = ({ onChatClick }) => {
     {
       id: 1,
       image: slide1,
-      subtitle: "Artisan Buket & Hadiah",
-      title: "Pilihan\nBuket\nPremium",
-      desc: "Kurasi bunga segar terbaik yang dirancang khusus untuk mewujudkan momen tak terlupakan Anda.",
+      subtitle: "Artisan Bunga Tangan & Kado",
+      title: "Kado\nAbadi Untuk\nTerkasih",
+      desc: "Rangkaian bunga buatan tangan (handcrafted) yang dirancang khusus untuk kenangan yang tidak akan pernah layu.",
     },
     {
       id: 2,
       image: slide2,
-      subtitle: "Kado Akrilik Mewah",
-      title: "Hadiah\nWisuda\nElegan",
-      desc: "Papan ucapan akrilik eksklusif dengan desain modern untuk merayakan pencapaian spesial orang terkasih.",
+      subtitle: "Karya Kreatif Palapa",
+      title: "Keindahan\nYang Tetap\nAbadi",
+      desc: "Setiap kelopak dibuat dengan detail untuk memastikan hadiah Anda tetap cantik selamanya. Sempurna untuk dekorasi atau kado.",
     },
     {
       id: 3,
       image: slide3,
-      subtitle: "Desain Sesuai Keinginan",
-      title: "Wujudkan\nBuket\nImpian Anda",
-      desc: "Punya ide sendiri? Konsultasikan dengan florist kami untuk merangkai bunga yang sesuai dengan imajinasi Anda.",
+      subtitle: "Pesanan Khusus",
+      title: "Wujudkan\nDesain\nImpian Anda",
+      desc: "Diskusikan desain favorit Anda dan ambil langsung di studio kami. Hasil karya personal untuk momen spesial.",
     },
   ];
 

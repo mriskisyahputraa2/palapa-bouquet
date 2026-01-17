@@ -59,19 +59,19 @@ const Catalog = ({ onChatClick }) => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
           <div className="space-y-4">
             <h2 className="text-palapa-rose/40 font-black tracking-[0.6em] uppercase text-[10px]">
-              Dibuat Dengan Sepenuh Hati
+              Karya Seni Tangan
             </h2>
             <h3 className="font-[900] text-5xl md:text-[80px] text-palapa-rose leading-[0.85] uppercase tracking-tighter">
               Koleksi <br />
-              <span className="text-palapa-rose/20">Unggulan</span> <br />
+              <span className="text-palapa-rose/20">Artisan</span> <br />
               Kami
             </h3>
           </div>
 
           <div className="max-w-xs text-right border-r-4 border-palapa-rose/10 pr-6 hidden md:block">
             <p className="text-palapa-rose/60 text-sm font-medium leading-relaxed italic">
-              "Setiap kelopak bunga dipilih secara teliti untuk memastikan hanya
-              keindahan terbaik yang sampai ke tangan Anda."
+              "Kami merangkai setiap bunga dengan ketelitian tinggi, menciptakan
+              hadiah indah yang tahan lama dan penuh makna."
             </p>
           </div>
         </div>

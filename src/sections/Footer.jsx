@@ -106,13 +106,17 @@ const Footer = () => {
               Hubungi Kami
             </h4>
             <ul className="space-y-5 text-sm font-medium">
-              <li className="flex items-start gap-3 text-white/80">
-                <MapPin size={20} className="text-white/60 shrink-0" />
-                <span>Jl. Melati No. 123, Kota Anda, Indonesia</span>
-              </li>
-              <li className="flex items-start gap-3 text-white/80">
-                <Phone size={18} className="text-white/60 shrink-0" />
-                <span>+62 812 3456 7890</span>
+              <li className="flex items-start gap-3 text-white">
+                <MapPin size={24} className="text-white shrink-0" />
+                <div className="space-y-2">
+                  <p className="font-bold">Lokasi Studio (Ambil di Tempat):</p>
+                  <p className="text-white/80 leading-relaxed">
+                    Jl. Melati No. 123, Kota Anda, Indonesia <br />
+                    <span className="text-[10px] bg-white/20 px-2 py-1 rounded mt-2 inline-block">
+                      Lihat di Google Maps
+                    </span>
+                  </p>
+                </div>
               </li>
             </ul>
           </div>

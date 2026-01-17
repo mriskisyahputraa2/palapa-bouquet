@@ -1,21 +1,18 @@
 import React from "react";
-// 1. HAPUS import MessageCircle dari lucide-react karena sudah tidak dipakai
-// import { MessageCircle } from "lucide-react";
-
-// 2. TAMBAHKAN import gambar WhatsApp Anda di sini
-// Pastikan nama file "whatsapp.png" sesuai dengan yang ada di folder src/assets/
+// Pastikan file gambar ini adalah PNG dengan background transparan agar hasilnya maksimal
 import waIcon from "./assets/whatsapp.png";
 
-// Import Komponen Sections
 import Navbar from "./sections/Navbar";
 import HeroCarousel from "./sections/HeroCarousel";
 import Catalog from "./sections/Catalog";
 import CustomOrder from "./sections/CustomOrder";
 import Footer from "./sections/Footer";
+import Testimonials from "./sections/Testimonials";
+import FAQ from "./sections/FAQ";
+import Location from "./sections/Location";
 
 const App = () => {
-  // --- KONFIGURASI WHATSAPP ---
-  const phoneNumber = "6281234567890"; // Ganti dengan nomor WA Anda
+  const phoneNumber = "6281234567890";
 
   const handleWhatsApp = (message) => {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
@@ -32,41 +29,35 @@ const App = () => {
         <HeroCarousel onChatClick={handleWhatsApp} />
         <Catalog onChatClick={handleWhatsApp} />
         <CustomOrder onChatClick={handleWhatsApp} />
+        <Testimonials />
+        <Location />
+        <FAQ />
       </main>
 
       <Footer />
 
-      {/* 4. TOMBOL WHATSAPP MELAYANG (FLOATING ACTION BUTTON) */}
+      {/* --- TOMBOL WHATSAPP MELAYANG DENGAN GAYA BARU --- */}
       <button
         onClick={() =>
           handleWhatsApp(
             "Halo Palapa Bouquet, saya ingin bertanya mengenai produk bunga Anda..."
           )
         }
-        // Catatan: Saya mengubah background tombol menjadi putih (bg-white) agar ikon PNG WhatsApp terlihat kontras dan bersih.
-        // Jika Anda tetap ingin background hijau, ubah kembali 'bg-white' menjadi 'bg-[#25D366]' dan hapus 'text-palapa-rose'.
-        className="fixed bottom-8 right-8 z-[100] bg-white text-palapa-rose p-3 rounded-full shadow-[0_15px_30px_rgba(0,0,0,0.2)] hover:scale-110 active:scale-95 transition-all duration-500 group flex items-center gap-3 border-4 border-white/50"
+        className="fixed bottom-8 right-8 z-[100] bg-white p-3 rounded-full shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50 hover:scale-105 active:scale-95 transition-all duration-500 group flex items-center gap-3 border-[3px] border-white"
         aria-label="Chat WhatsApp"
       >
-        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold text-sm whitespace-nowrap px-0 group-hover:px-2">
+        {/* Teks "Chat Florist" (Muncul saat hover) */}
+        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold text-sm text-palapa-rose whitespace-nowrap px-0 group-hover:px-2">
           Chat Florist
         </span>
 
-        {/* 5. GANTI BAGIAN INI */}
-        {/* <MessageCircle size={28} />  <-- Ikon lama dihapus */}
-
-        {/* Gunakan tag img untuk menampilkan file PNG */}
+        {/* PERUBAHAN PADA GAMBAR IKON: */}
         <img
           src={waIcon}
           alt="WhatsApp"
-          className="w-8 h-8 object-contain" // Ukuran disesuaikan (32px) agar pas
+          className="w-9 h-9 object-contain drop-shadow-md transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110"
         />
       </button>
-
-      {/* Dekorasi Tambahan (Opsional) */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-palapa-rose/10 z-[60]">
-        <div className="h-full bg-palapa-rose w-1/4 opacity-50"></div>
-      </div>
     </div>
   );
 };

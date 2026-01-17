@@ -1,5 +1,5 @@
 import React from "react";
-import customImg from "../assets/hero-bouquet.jpg"; // Gunakan foto florist yang sedang merangkai bunga
+import customImg from "../assets/top-view-beautiful-roses-bouquet-with-pink-ribbon.jpg"; // Gunakan foto florist yang sedang merangkai bunga
 
 const CustomOrder = ({ onChatClick }) => {
   return (
