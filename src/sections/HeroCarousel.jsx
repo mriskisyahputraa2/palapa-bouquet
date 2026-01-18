@@ -1,115 +1,90 @@
 import React from "react";
-// Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-// Import Swiper styles
+import { EffectFade, Pagination, Autoplay } from "swiper/modules";
+
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
-import "swiper/css/autoplay";
 
-// import required modules
-import { EffectFade, Pagination, Autoplay } from "swiper/modules";
-
-// --- GANTI DENGAN FOTO HD ANDA ---
-import slide1 from "../assets/hero-bouquet1.jpg"; // Misal: Foto Buket Wedding
-import slide2 from "../assets/hero-bouquet2.jpg"; // Misal: Foto Akrilik
-import slide3 from "../assets/hero-bouquet3.jpg"; // Misal: Foto Bunga Meja
+import slide1 from "../assets/hero-bouquet1.jpg";
+import slide2 from "../assets/hero-bouquet2.jpg";
+import slide3 from "../assets/hero-bouquet3.jpg";
 
 const HeroCarousel = ({ onChatClick }) => {
-  // Data untuk setiap slide
   const slides = [
     {
       id: 1,
       image: slide1,
-      subtitle: "Artisan Bunga Tangan & Kado",
-      title: "Kado\nAbadi Untuk\nTerkasih",
-      desc: "Rangkaian bunga buatan tangan (handcrafted) yang dirancang khusus untuk kenangan yang tidak akan pernah layu.",
+      subtitle: "Handcrafted Artisan Bouquet",
+      title: "Abadikan\nMomen Tanpa\nLayu",
+      desc: "Buket premium buatan tangan yang dirancang khusus untuk wisuda dan pernikahan. Keindahan yang tetap sempurna selamanya.",
     },
     {
       id: 2,
       image: slide2,
-      subtitle: "Karya Kreatif Palapa",
-      title: "Keindahan\nYang Tetap\nAbadi",
-      desc: "Setiap kelopak dibuat dengan detail untuk memastikan hadiah Anda tetap cantik selamanya. Sempurna untuk dekorasi atau kado.",
+      subtitle: "Modern Acrylic Board",
+      title: "Elegan\nDi Setiap\nUcapan",
+      desc: "Sewa atau miliki papan akrilik eksklusif untuk ucapan wisuda & wedding. Sentuhan modern yang membuat momen Anda berkesan.",
     },
     {
       id: 3,
       image: slide3,
-      subtitle: "Pesanan Khusus",
-      title: "Wujudkan\nDesain\nImpian Anda",
-      desc: "Diskusikan desain favorit Anda dan ambil langsung di studio kami. Hasil karya personal untuk momen spesial.",
+      subtitle: "Premium Hampers & Gift",
+      title: "Kado\nPersonal\nTerbaik",
+      desc: "Wujudkan kado impian Anda dengan layanan kustomisasi penuh. Dari hampers hingga buket unik, kami buatkan spesial untuk Anda.",
     },
   ];
 
-  // Tombol di dalam Slider:
-  <button className="...">Lihat Koleksi</button>;
-
   return (
-    // Gunakan -mt-24 agar navbar terlihat transparan di atas foto
-    <header className="relative h-screen -mt-24 font-poppins overflow-hidden">
+    <header
+      id="home"
+      className="relative h-[85vh] md:h-screen -mt-24 font-poppins overflow-hidden"
+    >
       <Swiper
-        spaceBetween={0}
-        effect={"fade"} // Efek transisi pudar (lebih elegan daripada geser)
-        speed={1000} // Kecepatan transisi (1 detik)
-        autoplay={{
-          delay: 5000, // Ganti slide setiap 5 detik
-          disableOnInteraction: false,
-        }}
-        pagination={{
-          clickable: true, // Titik-titik navigasi di bawah bisa diklik
-          dynamicBullets: true,
-        }}
+        effect={"fade"}
+        speed={1000}
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        pagination={{ clickable: true, dynamicBullets: true }}
         modules={[EffectFade, Pagination, Autoplay]}
         className="h-full w-full"
       >
         {slides.map((slide) => (
           <SwiperSlide key={slide.id} className="relative h-full w-full">
-            {/* 1. LAYER FOTO BACKGROUND */}
             <div className="absolute inset-0 w-full h-full">
               <img
                 src={slide.image}
                 alt={slide.title}
-                // object-cover penting agar foto memenuhi layar tanpa gepeng
                 className="w-full h-full object-cover"
               />
-              {/* 2. LAYER OVERLAY GELAP (PENTING UNTUK KETERBACAAN) */}
-              {/* Kita pakai gradasi hitam agar teks putih terbaca jelas */}
-              <div className="absolute inset-0 bg-black/40 md:bg-gradient-to-r md:from-black/60 md:to-transparent"></div>
+              <div className="absolute inset-0 bg-black/50 md:bg-gradient-to-r md:from-black/70 md:to-transparent"></div>
             </div>
 
-            {/* 3. KONTEN TEKS DI ATAS FOTO */}
             <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex items-center">
-              <div className="max-w-2xl space-y-8 pt-20">
-                <div className="space-y-2">
-                  {/* Subtitle dengan warna Dusty Rose terang */}
-                  <h2 className="text-palapa-petal font-extrabold tracking-[0.5em] uppercase text-[11px] ml-1 animate-fadeIn">
+              <div className="max-w-2xl space-y-6 md:space-y-8 pt-20">
+                <div className="space-y-3">
+                  <h2 className="text-white font-extrabold tracking-[0.3em] md:tracking-[0.5em] uppercase text-[9px] md:text-[11px] animate-fadeIn">
                     {slide.subtitle}
                   </h2>
-                  {/* Judul Putih Besar */}
-                  <h1 className="text-white font-[900] text-6xl md:text-[90px] leading-[0.9] tracking-tight uppercase whitespace-pre-line drop-shadow-lg">
+                  {/* RESPONSIVE TEXT SIZE: text-4xl di HP, text-7xl di iPad, text-[90px] di Desktop */}
+                  <h1 className="text-white font-[900] text-4xl sm:text-6xl md:text-7xl lg:text-[90px] leading-[1.1] md:leading-[0.9] tracking-tighter uppercase whitespace-pre-line drop-shadow-2xl">
                     {slide.title}
                   </h1>
                 </div>
 
-                {/* Deskripsi Putih/Abu terang */}
-                <p className="text-white/90 font-medium text-lg leading-relaxed max-w-md drop-shadow-md">
+                <p className="text-white/90 font-medium text-sm md:text-lg leading-relaxed max-w-md drop-shadow-md">
                   {slide.desc}
                 </p>
 
-                {/* Tombol Aksi */}
-                <div className="pt-6">
+                <div className="pt-4 md:pt-6">
                   <button
                     onClick={() =>
                       onChatClick(
-                        `Halo, saya tertarik dengan ${slide.title.replace(
-                          /\n/g,
-                          " "
-                        )}`
+                        `Halo Palapa Bouquet, saya tertarik dengan layanan: ${slide.subtitle}`,
                       )
                     }
-                    className="bg-palapa-rose text-white px-14 py-5 font-[900] text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-white hover:text-palapa-rose transition-all duration-500 transform hover:-translate-y-1"
+                    className="bg-palapa-rose text-white px-8 md:px-14 py-4 md:py-5 font-[900] text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-white hover:text-palapa-rose transition-all duration-500 transform hover:-translate-y-1 active:scale-95"
                   >
-                    Pesan Sekarang
+                    Konsultasi Produk
                   </button>
                 </div>
               </div>
@@ -118,19 +93,16 @@ const HeroCarousel = ({ onChatClick }) => {
         ))}
       </Swiper>
 
-      {/* CSS Custom untuk Pagination Swiper agar warnanya pink */}
-      <style jsx>{`
+      <style jsx global>{`
         .swiper-pagination-bullet {
-          background-color: white;
+          background: white !important;
           opacity: 0.5;
-          width: 10px;
-          height: 10px;
         }
         .swiper-pagination-bullet-active {
-          background-color: var(--color-palapa-rose);
-          opacity: 1;
-          width: 24px;
-          border-radius: 8px;
+          background: #b17a87 !important;
+          width: 24px !important;
+          border-radius: 8px !important;
+          opacity: 1 !important;
         }
       `}</style>
     </header>

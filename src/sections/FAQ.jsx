@@ -6,24 +6,24 @@ const FAQ = () => {
 
   const faqs = [
     {
-      question: "Apakah ini bunga asli/segar?",
+      question: "Apakah ini bunga asli atau segar?",
       answer:
-        "Tidak, Palapa Bouquet spesialis dalam bunga buatan tangan (artificial/handcrafted). Keunggulannya adalah bunga ini tidak akan layu dan tetap cantik selamanya sebagai kenangan.",
+        "Kami spesialis bunga buatan tangan (artificial/handcrafted). Kelebihannya, buket Anda tidak akan layu, tetap cantik selamanya, dan sangat cocok untuk kenang-kenangan wisuda atau dekorasi rumah.",
     },
     {
-      question: "Apakah Palapa Bouquet melayani pengiriman?",
+      question: "Bagaimana sistem sewa papan akrilik?",
       answer:
-        "Saat ini kami hanya melayani sistem 'Self-Pickup' atau Ambil di Toko. Pelanggan dapat datang langsung ke studio kami untuk mengambil pesanan guna memastikan produk diterima dalam kondisi sempurna.",
+        "Untuk papan akrilik, kami menyediakan opsi sewa (lebih hemat untuk acara harian) maupun beli. Sistem sewa berlaku harian dan pengambilan serta pengembalian dilakukan langsung di toko kami.",
     },
     {
-      question: "Berapa lama proses pengerjaan bunga kustom?",
+      question: "Berapa lama proses pengerjaan buket kustom?",
       answer:
-        "Untuk pesanan khusus, proses pengerjaan biasanya memakan waktu 1-3 hari tergantung pada kerumitan desain. Kami menyarankan pemesanan dilakukan jauh-jauh hari.",
+        "Proses pengerjaan biasanya 1-3 hari tergantung kerumitan. Namun, kami juga menyediakan beberapa produk 'Ready Stock' yang bisa langsung diambil jika Anda butuh kado mendadak.",
     },
     {
-      question: "Di mana lokasi pengambilan pesanan?",
+      question: "Di mana lokasi pengambilan?",
       answer:
-        "Lokasi studio kami berada di [Alamat Lengkap Anda]. Detail lokasi dan jam operasional dapat Anda lihat di bagian bawah (Footer) website ini.",
+        "Toko kami berlokasi di Jalan Palapa 1, Hagu Teungoh, Lhokseumawe. Kami melayani pengambilan langsung untuk memastikan kado Anda tetap dalam kondisi sempurna tanpa risiko rusak di perjalanan.",
     },
   ];
 
@@ -32,17 +32,18 @@ const FAQ = () => {
   };
 
   return (
-    <section className="py-24 bg-white font-poppins relative overflow-hidden">
-      {/* Dekorasi Halus */}
-      <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-palapa-rose/5 rounded-full blur-[100px] -z-10"></div>
-
+    <section
+      id="faq"
+      className="py-24 bg-white font-poppins relative overflow-hidden"
+    >
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-palapa-rose/40 font-black tracking-[0.5em] uppercase text-[10px]">
-            Punya Pertanyaan?
-          </h2>
-          <h3 className="font-[900] text-4xl md:text-5xl text-palapa-rose uppercase">
-            Bantuan & FAQ
+          <span className="text-palapa-rose/40 font-black tracking-[0.5em] uppercase text-[10px]">
+            Informasi Layanan
+          </span>
+          <h3 className="font-[900] text-4xl md:text-5xl text-palapa-rose uppercase tracking-tighter leading-tight">
+            Bantuan & <br className="md:hidden" />{" "}
+            <span className="text-palapa-rose/20">FAQ</span>
           </h3>
         </div>
 
@@ -70,7 +71,7 @@ const FAQ = () => {
                     }`}
                   />
                   <span
-                    className={`font-extrabold text-sm md:text-base uppercase tracking-tight ${
+                    className={`font-extrabold text-xs md:text-base uppercase tracking-tight ${
                       activeIndex === index
                         ? "text-palapa-rose"
                         : "text-palapa-rose/80"
@@ -96,24 +97,14 @@ const FAQ = () => {
                     : "max-h-0 opacity-0"
                 }`}
               >
-                <div className="px-6 md:px-8 pb-8 pt-0 ml-9">
-                  <p className="text-palapa-rose/70 font-medium leading-relaxed border-l-2 border-palapa-rose/20 pl-6">
+                <div className="px-6 md:px-8 pb-8 pt-0 ml-0 md:ml-9">
+                  <p className="text-palapa-rose/70 text-sm md:text-base font-medium leading-relaxed border-l-2 border-palapa-rose/20 pl-6">
                     {faq.answer}
                   </p>
                 </div>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Pesan Tambahan */}
-        <div className="mt-16 text-center p-8 rounded-[2.5rem] bg-palapa-cream/50 border border-palapa-rose/10">
-          <p className="text-palapa-rose/60 text-sm font-bold uppercase tracking-widest">
-            Masih butuh bantuan lainnya?
-            <span className="block md:inline md:ml-2 text-palapa-rose cursor-pointer border-b-2 border-palapa-rose/30 hover:border-palapa-rose transition-all">
-              Tanyakan langsung via WhatsApp kami
-            </span>
-          </p>
         </div>
       </div>
     </section>
