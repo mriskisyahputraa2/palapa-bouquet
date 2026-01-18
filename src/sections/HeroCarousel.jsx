@@ -2,13 +2,16 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectFade, Pagination, Autoplay } from "swiper/modules";
 
+// Import CSS Swiper
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 
-import slide1 from "../assets/hero-bouquet1.jpg";
-import slide2 from "../assets/hero-bouquet2.jpg";
-import slide3 from "../assets/hero-bouquet3.jpg";
+// Import Asset
+import slide1 from "../assets/hero-bouquet1.webp";
+import slide2 from "../assets/hero-bouquet2.webp";
+import slide3 from "../assets/hero-bouquet3.webp";
+import waIcon from "../assets/whatsapp.png"; // Pastikan path asset benar
 
 const HeroCarousel = ({ onChatClick }) => {
   const slides = [
@@ -65,7 +68,6 @@ const HeroCarousel = ({ onChatClick }) => {
                   <h2 className="text-white font-extrabold tracking-[0.3em] md:tracking-[0.5em] uppercase text-[9px] md:text-[11px] animate-fadeIn">
                     {slide.subtitle}
                   </h2>
-                  {/* RESPONSIVE TEXT SIZE: text-4xl di HP, text-7xl di iPad, text-[90px] di Desktop */}
                   <h1 className="text-white font-[900] text-4xl sm:text-6xl md:text-7xl lg:text-[90px] leading-[1.1] md:leading-[0.9] tracking-tighter uppercase whitespace-pre-line drop-shadow-2xl">
                     {slide.title}
                   </h1>
@@ -76,15 +78,25 @@ const HeroCarousel = ({ onChatClick }) => {
                 </p>
 
                 <div className="pt-4 md:pt-6">
+                  {/* TOMBOL PESAN SEKARANG DENGAN ICON WA */}
                   <button
                     onClick={() =>
                       onChatClick(
-                        `Halo Palapa Bouquet, saya tertarik dengan layanan: ${slide.subtitle}`,
+                        `Halo Palapa Bouquet, saya ingin pesan layanan: ${slide.subtitle}`,
                       )
                     }
-                    className="bg-palapa-rose text-white px-8 md:px-14 py-4 md:py-5 font-[900] text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-white hover:text-palapa-rose transition-all duration-500 transform hover:-translate-y-1 active:scale-95"
+                    className="group relative flex items-center gap-4 bg-palapa-rose text-white px-8 md:px-10 py-4 md:py-5 font-[900] text-[10px] md:text-xs uppercase tracking-[0.2em] shadow-2xl hover:bg-white hover:text-palapa-rose transition-all duration-500 transform hover:-translate-y-1 active:scale-95 overflow-hidden rounded-sm"
                   >
-                    Konsultasi Produk
+                    {/* Icon WA Kecil di dalam Tombol */}
+                    <img
+                      src={waIcon}
+                      alt="WA"
+                      className="w-5 h-5 md:w-6 md:h-6 object-contain brightness-0 invert group-hover:invert-0 transition-all duration-500"
+                    />
+                    <span className="relative z-10">Pesan Sekarang</span>
+
+                    {/* Efek Kilau saat Hover */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   </button>
                 </div>
               </div>

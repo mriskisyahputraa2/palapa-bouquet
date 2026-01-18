@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Palette, Coins, Gift, MessageCircle } from "lucide-react";
-import customImg from "../assets/hero-bouquet.jpg";
+import customImg from "../assets/hero-bouquet.webp";
 
 const CustomOrder = ({ onChatClick }) => {
   const features = [

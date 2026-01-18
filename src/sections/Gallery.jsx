@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Quote } from "lucide-react";
 
 // Import aset foto Anda
-import img1 from "../assets/hero-bouquet.jpg";
-import img2 from "../assets/hero-bouquet1.jpg";
-import img3 from "../assets/hero-bouquet2.jpg";
-import img4 from "../assets/hero-bouquet3.jpg";
+import img1 from "../assets/hero-bouquet.webp";
+import img2 from "../assets/hero-bouquet1.webp";
+import img3 from "../assets/hero-bouquet2.webp";
+import img4 from "../assets/hero-bouquet3.webp";
 
 const Gallery = ({ onChatClick }) => {
   // Data Galeri dengan ukuran lebar bervariasi

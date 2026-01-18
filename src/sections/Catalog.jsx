@@ -2,10 +2,10 @@ import React from "react";
 import { ShoppingBag, Star, Info } from "lucide-react";
 
 // Import foto-foto produk
-import img1 from "../assets/hero-bouquet.jpg";
-import img2 from "../assets/hero-bouquet1.jpg";
-import img3 from "../assets/hero-bouquet2.jpg";
-import img4 from "../assets/hero-bouquet3.jpg";
+import img1 from "../assets/hero-bouquet.webp";
+import img2 from "../assets/hero-bouquet1.webp";
+import img3 from "../assets/hero-bouquet2.webp";
+import img4 from "../assets/hero-bouquet3.webp";
 
 const Catalog = ({ onChatClick }) => {
   const products = [
