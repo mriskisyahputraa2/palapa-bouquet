@@ -1,65 +1,75 @@
-import React from "react";
-// Pastikan file gambar ini adalah PNG dengan background transparan agar hasilnya maksimal
-import waIcon from "./assets/whatsapp.png";
+import React, { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 
+// Komponen Utama
 import Navbar from "./sections/Navbar";
 import HeroCarousel from "./sections/HeroCarousel";
 import Catalog from "./sections/Catalog";
-import CustomOrder from "./sections/CustomOrder";
-import Footer from "./sections/Footer";
-import Testimonials from "./sections/Testimonials";
-import FAQ from "./sections/FAQ";
-import Location from "./sections/Location";
 import Gallery from "./sections/Gallery";
+import CustomOrder from "./sections/CustomOrder";
+import Testimonials from "./sections/Testimonials";
+import Location from "./sections/Location";
+import FAQ from "./sections/FAQ";
+import Footer from "./sections/Footer";
+
+// Komponen Optimasi
+import LoadingScreen from "./components/LoadingScreen";
+import FadeIn from "./components/FadeIn";
 
 const App = () => {
-  const phoneNumber = "6281234567890";
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulasi loading aset selama 2 detik
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleWhatsApp = (message) => {
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message,
-    )}`;
+    const url = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
   };
 
   return (
-    <div className="antialiased bg-palapa-cream font-poppins selection:bg-palapa-rose selection:text-white">
+    <div className="antialiased bg-[#FAF5F6] font-poppins">
+      {/* 1. Efek Loading Screen di Awal */}
+      <AnimatePresence>{loading && <LoadingScreen />}</AnimatePresence>
+
       <Navbar />
 
-      <main>
-        <HeroCarousel onChatClick={handleWhatsApp} />
-        <Catalog onChatClick={handleWhatsApp} />
-        <Gallery />
-        <CustomOrder onChatClick={handleWhatsApp} />
-        <Testimonials />
-        <Location />
-        <FAQ />
+      <main className={loading ? "hidden" : "block"}>
+        {/* 2. Setiap Section dibungkus FadeIn agar muncul halus & ringan */}
+        <FadeIn>
+          <HeroCarousel onChatClick={handleWhatsApp} />
+        </FadeIn>
+
+        <div className="space-y-0">
+          {" "}
+          {/* Menghilangkan celah antar section */}
+          <FadeIn>
+            <Catalog onChatClick={handleWhatsApp} />
+          </FadeIn>
+          <FadeIn>
+            <Gallery />
+          </FadeIn>
+          <FadeIn>
+            <CustomOrder onChatClick={handleWhatsApp} />
+          </FadeIn>
+          <FadeIn>
+            <Testimonials />
+          </FadeIn>
+          <FadeIn>
+            <Location />
+          </FadeIn>
+          <FadeIn>
+            <FAQ />
+          </FadeIn>
+        </div>
       </main>
 
       <Footer />
-
-      {/* --- TOMBOL WHATSAPP MELAYANG DENGAN GAYA BARU --- */}
-      <button
-        onClick={() =>
-          handleWhatsApp(
-            "Halo Palapa Bouquet, saya ingin bertanya mengenai produk bunga Anda...",
-          )
-        }
-        className="fixed bottom-8 right-8 z-[100] bg-white p-3 rounded-full shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50 hover:scale-105 active:scale-95 transition-all duration-500 group flex items-center gap-3 border-[3px] border-white"
-        aria-label="Chat WhatsApp"
-      >
-        {/* Teks "Chat Florist" (Muncul saat hover) */}
-        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold text-sm text-palapa-rose whitespace-nowrap px-0 group-hover:px-2">
-          Chat Florist
-        </span>
-
-        {/* PERUBAHAN PADA GAMBAR IKON: */}
-        <img
-          src={waIcon}
-          alt="WhatsApp"
-          className="w-9 h-9 object-contain drop-shadow-md transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110"
-        />
-      </button>
     </div>
   );
 };

@@ -1,103 +1,123 @@
 import React from "react";
-import ProductCard from "../components/ProductCard";
+import { ShoppingBag, Star } from "lucide-react";
 
-// Ganti path ini dengan foto-foto produk asli Anda di folder assets
-import prod1 from "../assets/hero-bouquet.jpg";
+// 1. PASTIKAN IMPORT INI BENAR (Nama file harus sama persis, perhatikan besar kecil huruf)
+import img1 from "../assets/hero-bouquet.jpg";
+import img2 from "../assets/hero-bouquet1.jpg";
+import img3 from "../assets/hero-bouquet2.jpg";
+import img4 from "../assets/hero-bouquet3.jpg";
 
 const Catalog = ({ onChatClick }) => {
-  // Data produk dalam Bahasa Indonesia
+  // 2. GUNAKAN VARIABEL (img1, img2, dst) TANPA TANDA KUTIP
   const products = [
     {
-      title: "Velvet Romance",
+      id: 1,
+      name: "Velvet Romance",
       price: "450.000",
-      category: "Buket Premium",
-      img: prod1,
+      tag: "Buket Premium",
+      img: img1,
     },
     {
-      title: "Eternal Grace",
+      id: 2,
+      name: "Eternal Grace",
       price: "550.000",
-      category: "Pernikahan",
-      img: prod1,
+      tag: "Pernikahan",
+      img: img2,
     },
     {
-      title: "Golden Success",
+      id: 3,
+      name: "Golden Success",
       price: "375.000",
-      category: "Wisuda",
-      img: prod1,
+      tag: "Wisuda",
+      img: img3,
     },
     {
-      title: "Whispering Lilies",
+      id: 4,
+      name: "Whispering Lilies",
       price: "420.000",
-      category: "Anniversary",
-      img: prod1,
+      tag: "Anniversary",
+      img: img4,
     },
     {
-      title: "Acrylic Dreams",
+      id: 5,
+      name: "Acrylic Dreams",
       price: "600.000",
-      category: "Hadiah Spesial",
-      img: prod1,
+      tag: "Hadiah Spesial",
+      img: img1,
     },
     {
-      title: "Pure Serenity",
+      id: 6,
+      name: "Pure Serenity",
       price: "325.000",
-      category: "Dekorasi Meja",
-      img: prod1,
+      tag: "Dekorasi Meja",
+      img: img2,
     },
   ];
 
   return (
-    <section
-      id="katalog"
-      className="relative py-32 overflow-hidden bg-white font-poppins"
-    >
-      {/* Aksen Latar Belakang Organik */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-palapa-rose/5 blur-[120px] rounded-full -z-10"></div>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-palapa-petal/5 blur-[150px] rounded-full -z-10"></div>
-
+    <section id="katalog" className="py-32 bg-white font-poppins">
       <div className="max-w-7xl mx-auto px-6">
-        {/* Header Seksi (Gaya Editorial) */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
           <div className="space-y-4">
-            <h2 className="text-palapa-rose/40 font-black tracking-[0.6em] uppercase text-[10px]">
-              Karya Seni Tangan
-            </h2>
-            <h3 className="font-[900] text-5xl md:text-[80px] text-palapa-rose leading-[0.85] uppercase tracking-tighter">
-              Koleksi <br />
-              <span className="text-palapa-rose/20">Artisan</span> <br />
-              Kami
+            <span className="text-palapa-rose/40 font-black tracking-[0.8em] uppercase text-[10px] block">
+              Koleksi Terpilih
+            </span>
+            <h3 className="font-[900] text-6xl md:text-8xl text-palapa-rose leading-[0.8] uppercase tracking-tighter">
+              Daftar <br /> <span className="text-palapa-rose/20">Produk</span>
             </h3>
           </div>
-
-          <div className="max-w-xs text-right border-r-4 border-palapa-rose/10 pr-6 hidden md:block">
-            <p className="text-palapa-rose/60 text-sm font-medium leading-relaxed italic">
-              "Kami merangkai setiap bunga dengan ketelitian tinggi, menciptakan
-              hadiah indah yang tahan lama dan penuh makna."
-            </p>
-          </div>
         </div>
 
-        {/* Grid Kartu Produk */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
-          {products.map((item, index) => (
-            <ProductCard
-              key={index}
-              title={item.title}
-              price={item.price}
-              imageSrc={item.img}
-              category={item.category}
-              onChatClick={onChatClick}
-            />
+        {/* PRODUCT GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-20 gap-x-12">
+          {products.map((product) => (
+            <div key={product.id} className="group flex flex-col">
+              {/* IMAGE CONTAINER */}
+              <div className="relative aspect-[4/5] rounded-[3.5rem] overflow-hidden bg-palapa-cream border-[12px] border-white shadow-[0_20px_50px_rgba(177,122,135,0.1)] transition-all duration-700 hover:shadow-[0_40px_80px_rgba(177,122,135,0.2)]">
+                <img
+                  src={product.img} // Memanggil variabel gambar
+                  alt={product.name}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                />
+
+                <div className="absolute top-8 left-8 bg-white/80 backdrop-blur-md px-5 py-2 rounded-full border border-white/20">
+                  <span className="text-[10px] font-black text-palapa-rose uppercase tracking-widest">
+                    {product.tag}
+                  </span>
+                </div>
+              </div>
+
+              {/* PRODUCT INFO */}
+              <div className="mt-8 px-2 space-y-4 flex flex-col items-center text-center">
+                <div className="space-y-1">
+                  <div className="flex items-center justify-center gap-1 text-yellow-400 mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={10} fill="currentColor" />
+                    ))}
+                  </div>
+                  <h4 className="text-2xl font-[900] text-palapa-rose uppercase tracking-tighter leading-none">
+                    {product.name}
+                  </h4>
+                  <p className="text-xl font-medium text-palapa-rose/60">
+                    Rp {product.price}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() =>
+                    onChatClick(
+                      `Halo Palapa Bouquet, saya ingin memesan ${product.name}`,
+                    )
+                  }
+                  className="w-full py-4 bg-palapa-rose text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-lg shadow-palapa-rose/20 hover:bg-palapa-rose/80 hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-3"
+                >
+                  <ShoppingBag size={16} />
+                  Pesan Sekarang
+                </button>
+              </div>
+            </div>
           ))}
-        </div>
-
-        {/* Tombol Lihat Semua */}
-        <div className="mt-32 text-center">
-          <button className="group relative px-16 py-5 overflow-hidden inline-block">
-            <span className="relative z-10 font-black text-palapa-rose uppercase tracking-[0.4em] text-[11px] group-hover:text-white transition-colors duration-500">
-              Lihat Semua Karya
-            </span>
-            <div className="absolute inset-0 border-2 border-palapa-rose rounded-2xl group-hover:bg-palapa-rose transition-all duration-500"></div>
-          </button>
         </div>
       </div>
     </section>
