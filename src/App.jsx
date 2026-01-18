@@ -20,7 +20,6 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulasi loading aset selama 2 detik
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2000);
@@ -33,21 +32,18 @@ const App = () => {
   };
 
   return (
-    <div className="antialiased bg-[#FAF5F6] font-poppins">
-      {/* 1. Efek Loading Screen di Awal */}
+    <div className="antialiased bg-[#FAF5F6] font-poppins selection:bg-palapa-rose selection:text-white">
       <AnimatePresence>{loading && <LoadingScreen />}</AnimatePresence>
 
       <Navbar />
 
-      <main className={loading ? "hidden" : "block"}>
-        {/* 2. Setiap Section dibungkus FadeIn agar muncul halus & ringan */}
+      {/* Tambahkan pt-20 (mobile) dan md:pt-24 (desktop) agar konten tidak tertutup Navbar Fixed */}
+      <main className={`${loading ? "hidden" : "block"} pt-20 md:pt-24`}>
         <FadeIn>
           <HeroCarousel onChatClick={handleWhatsApp} />
         </FadeIn>
 
         <div className="space-y-0">
-          {" "}
-          {/* Menghilangkan celah antar section */}
           <FadeIn>
             <Catalog onChatClick={handleWhatsApp} />
           </FadeIn>
