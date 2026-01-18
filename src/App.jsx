@@ -10,13 +10,14 @@ import Footer from "./sections/Footer";
 import Testimonials from "./sections/Testimonials";
 import FAQ from "./sections/FAQ";
 import Location from "./sections/Location";
+import Gallery from "./sections/Gallery";
 
 const App = () => {
   const phoneNumber = "6281234567890";
 
   const handleWhatsApp = (message) => {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
+      message,
     )}`;
     window.open(url, "_blank");
   };
@@ -28,6 +29,7 @@ const App = () => {
       <main>
         <HeroCarousel onChatClick={handleWhatsApp} />
         <Catalog onChatClick={handleWhatsApp} />
+        <Gallery />
         <CustomOrder onChatClick={handleWhatsApp} />
         <Testimonials />
         <Location />
@@ -40,7 +42,7 @@ const App = () => {
       <button
         onClick={() =>
           handleWhatsApp(
-            "Halo Palapa Bouquet, saya ingin bertanya mengenai produk bunga Anda..."
+            "Halo Palapa Bouquet, saya ingin bertanya mengenai produk bunga Anda...",
           )
         }
         className="fixed bottom-8 right-8 z-[100] bg-white p-3 rounded-full shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50 hover:scale-105 active:scale-95 transition-all duration-500 group flex items-center gap-3 border-[3px] border-white"
