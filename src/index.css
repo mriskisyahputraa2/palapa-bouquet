@@ -1,8 +1,6 @@
-/* 1. SEMUA @IMPORT WAJIB DI ATAS SENDIRI */
 @import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
-/* 2. BARU KEMUDIAN DEKLARASI THEME ATAU GAYA LAINNYA */
 @theme {
   --color-palapa-rose: #b17a87;
   --color-palapa-petal: #e3a9b4;
