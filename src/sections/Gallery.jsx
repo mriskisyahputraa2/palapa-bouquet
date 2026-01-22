@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Quote } from "lucide-react";
 
 // Import aset foto Anda
-import img1 from "../assets/hero-bouquet.webp";
-import img2 from "../assets/hero-bouquet1.webp";
-import img3 from "../assets/hero-bouquet2.webp";
+import img1 from "../assets/WhatsApp Image 2026-01-22 at 11.28.47.jpeg";
+import img2 from "../assets/bunga3.jpeg";
+import img3 from "../assets/bunga3.jpeg";
 import img4 from "../assets/hero-bouquet3.webp";
 
 const Gallery = ({ onChatClick }) => {
