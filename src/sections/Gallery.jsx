@@ -9,6 +9,7 @@ import img3 from "../assets/bunga3.jpeg";
 import img4 from "../assets/hero-bouquet3.webp";
 
 const Gallery = ({ onChatClick }) => {
+  //
   // Data Galeri dengan ukuran lebar bervariasi
   const galleryItems = [
     {
