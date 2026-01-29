@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Quote } from "lucide-react";
 
 // Import aset foto Anda
-import img1 from "../assets/WhatsApp Image 2026-01-22 at 11.28.47.jpeg";
-import img2 from "../assets/bunga3.jpeg";
-import img3 from "../assets/bunga3.jpeg";
-import img4 from "../assets/hero-bouquet3.webp";
+import img1 from "../assets/hero1.webp";
+import img2 from "../assets/hero2.webp";
+import img3 from "../assets/hero3.webp";
+import img4 from "../assets/hero4.webp";
+import img5 from "../assets/hero5.webp";
 
 const Gallery = ({ onChatClick }) => {
   //
@@ -42,7 +43,7 @@ const Gallery = ({ onChatClick }) => {
     },
     {
       id: "05",
-      img: img1,
+      img: img5,
       title: "Vintage Petal",
       category: "DECORATION",
       size: "w-[320px] md:w-[520px]",
