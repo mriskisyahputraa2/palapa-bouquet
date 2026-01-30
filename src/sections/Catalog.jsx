@@ -8,6 +8,7 @@ import {
   Eye,
   Sparkles,
   Quote,
+  Maximize2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { client, urlFor } from "../sanity";
@@ -22,6 +23,9 @@ const Catalog = ({ onChatClick }) => {
   const [activeCategory, setActiveCategory] = useState("Semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // State untuk Fitur Zoom (Lightbox)
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const ITEMS_PER_PAGE = 6;
   const [lastIndex, setLastIndex] = useState(ITEMS_PER_PAGE);
@@ -87,13 +91,12 @@ const Catalog = ({ onChatClick }) => {
   }, [activeCategory, debouncedSearch]);
 
   useEffect(() => {
-    if (selectedProduct) {
-      setActiveIndex(0);
+    if (selectedProduct || isLightboxOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
-  }, [selectedProduct]);
+  }, [selectedProduct, isLightboxOpen]);
 
   const formatPrice = (price) => {
     if (!price) return "";
@@ -105,12 +108,21 @@ const Catalog = ({ onChatClick }) => {
     }).format(clean);
   };
 
-  // --- PERBAIKAN 1: Filter foto agar tidak ada undefined ---
   const allImages = selectedProduct
     ? [selectedProduct.mainImage, ...(selectedProduct.gallery || [])].filter(
         Boolean,
       )
     : [];
+
+  const nextImage = (e) => {
+    e.stopPropagation();
+    setActiveIndex((prev) => (prev + 1) % allImages.length);
+  };
+
+  const prevImage = (e) => {
+    e.stopPropagation();
+    setActiveIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+  };
 
   if (loading)
     return (
@@ -146,17 +158,16 @@ const Catalog = ({ onChatClick }) => {
               </span>
             </h3>
           </div>
-
           <div className="flex flex-col items-center lg:items-end space-y-4 lg:space-y-6 w-full lg:w-auto">
             <Quote className="text-palapa-rose/20 w-8 h-8 md:w-12 md:h-12" />
             <p className="max-w-xs text-palapa-rose/60 text-[11px] md:text-sm leading-relaxed italic font-medium px-4 lg:px-0">
               "Keindahan abadi dalam setiap detail. Temukan koleksi buket
-              eksklusif, papan akrilik modern, dan hampers kustom yang dirangkai
-              khusus untuk menyempurnakan setiap ungkapan rasa Anda."
+              eksklusif, papan akrilik modern, dan hampers kustom."
             </p>
           </div>
         </div>
 
+        {/* SEARCH & FILTER AREA */}
         <div className="flex flex-col gap-8 mb-16">
           <div className="flex justify-center lg:justify-start">
             <div className="relative w-full max-w-md lg:w-96 group">
@@ -173,17 +184,12 @@ const Catalog = ({ onChatClick }) => {
               />
             </div>
           </div>
-
           <div className="flex overflow-x-auto gap-3 pb-4 scrollbar-hide -mx-6 px-6 lg:mx-0 lg:px-0">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-10 py-4 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
-                  activeCategory === cat
-                    ? "bg-palapa-rose text-white shadow-xl shadow-palapa-rose/20 scale-105"
-                    : "bg-white text-palapa-rose hover:bg-palapa-rose/5"
-                }`}
+                className={`px-10 py-4 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeCategory === cat ? "bg-palapa-rose text-white shadow-xl shadow-palapa-rose/20 scale-105" : "bg-white text-palapa-rose hover:bg-palapa-rose/5"}`}
               >
                 {cat}
               </button>
@@ -191,6 +197,7 @@ const Catalog = ({ onChatClick }) => {
           </div>
         </div>
 
+        {/* GRID PRODUK */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-20">
           <AnimatePresence mode="popLayout">
             {products.length > 0 ? (
@@ -201,7 +208,7 @@ const Catalog = ({ onChatClick }) => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                   key={product._id}
-                  className="group flex flex-col"
+                  className="group flex flex-col h-full"
                 >
                   <div
                     className="relative aspect-[4/5] rounded-[3rem] lg:rounded-[4.5rem] overflow-hidden bg-white border-[10px] lg:border-[15px] border-white shadow-xl cursor-pointer transform-gpu transition-all duration-700 group-hover:shadow-2xl group-hover:-translate-y-4 group-hover:rotate-1"
@@ -216,66 +223,45 @@ const Catalog = ({ onChatClick }) => {
                       className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
                       alt={product.name}
                     />
-                    <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-5 py-2 rounded-full shadow-sm">
-                      <span className="text-[9px] font-black text-palapa-rose uppercase tracking-widest">
-                        {product.categoryName}
-                      </span>
-                    </div>
                   </div>
-
-                  <div className="mt-10 px-4 text-center space-y-6">
+                  <div className="mt-10 px-4 flex flex-col flex-1 text-center">
                     <div
                       onClick={() => setSelectedProduct(product)}
-                      className="cursor-pointer space-y-2"
+                      className="cursor-pointer space-y-2 flex-1 flex flex-col justify-center mb-6"
                     >
-                      <h4 className="text-3xl font-[900] text-palapa-rose uppercase tracking-tighter leading-tight">
+                      <h4 className="text-3xl font-[900] text-palapa-rose uppercase tracking-tighter leading-tight min-h-[4rem] flex items-center justify-center">
                         {product.name}
                       </h4>
                       <p className="text-xl font-medium text-palapa-rose/40 italic">
                         {formatPrice(product.price)}
                       </p>
                     </div>
-
-                    <div className="flex flex-col gap-3">
+                    <div className="mt-auto space-y-3">
                       <button
                         onClick={() =>
                           onChatClick(
                             `Halo Palapa Bouquet, saya ingin pesan ${product.name}`,
                           )
                         }
-                        className="w-full py-5 bg-palapa-rose text-white rounded-[1.8rem] font-black text-[10px] uppercase tracking-[0.3em] shadow-lg flex items-center justify-center gap-3 transition-all hover:bg-palapa-rose/90 active:scale-95"
+                        className="w-full py-4 bg-palapa-rose text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-[0.3em] shadow-lg flex items-center justify-center gap-3 hover:bg-palapa-rose/90 transition-all"
                       >
-                        <ShoppingBag size={16} /> Pesan Sekarang
+                        <ShoppingBag size={14} /> Pesan Sekarang
                       </button>
                       <button
                         onClick={() => setSelectedProduct(product)}
-                        className="w-full py-5 border-2 border-palapa-rose/10 text-palapa-rose rounded-[1.8rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-white transition-all"
+                        className="w-full py-4 border-2 border-palapa-rose/10 text-palapa-rose rounded-[1.5rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-white transition-all"
                       >
-                        <Eye size={16} /> Lihat Detail
+                        <Eye size={14} /> Lihat Detail
                       </button>
                     </div>
                   </div>
                 </motion.div>
               ))
             ) : (
-              <div className="col-span-full py-20 text-center">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="space-y-4"
-                >
-                  <div className="text-palapa-rose/10 flex justify-center">
-                    <ShoppingBag size={80} />
-                  </div>
-                  <h4 className="text-2xl font-black text-palapa-rose uppercase tracking-widest">
-                    {activeCategory === "Semua"
-                      ? "Produk belum tersedia"
-                      : "Kategori ini belum ada produk"}
-                  </h4>
-                  <p className="text-palapa-rose/40 italic">
-                    Silakan cek kategori lainnya atau cari kata kunci lain.
-                  </p>
-                </motion.div>
+              <div className="col-span-full py-20 text-center font-black text-palapa-rose/20 uppercase tracking-widest">
+                {activeCategory === "Semua"
+                  ? "Produk belum tersedia"
+                  : "Kategori ini belum ada produk"}
               </div>
             )}
           </AnimatePresence>
@@ -286,21 +272,22 @@ const Catalog = ({ onChatClick }) => {
             <button
               onClick={() => fetchProducts(false)}
               disabled={loadingMore}
-              className="px-12 py-6 border-2 border-palapa-rose/20 text-palapa-rose rounded-full font-black text-[10px] uppercase tracking-[0.5em] hover:bg-palapa-rose hover:text-white transition-all disabled:opacity-50 shadow-sm"
+              className="px-12 py-6 border-2 border-palapa-rose/20 text-palapa-rose rounded-full font-black text-[10px] uppercase tracking-[0.5em] hover:bg-palapa-rose hover:text-white transition-all disabled:opacity-50"
             >
-              {loadingMore ? "Menelusuri..." : "Lihat Koleksi Lainnya"}
+              Lihat Lainnya
             </button>
           </div>
         )}
       </div>
 
+      {/* --- MODAL DETAIL --- */}
       <AnimatePresence>
         {selectedProduct && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center p-0 md:p-6 lg:p-12 bg-black/80 backdrop-blur-xl"
+            className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-black/80 backdrop-blur-xl"
             onClick={() => setSelectedProduct(null)}
           >
             <motion.div
@@ -313,48 +300,54 @@ const Catalog = ({ onChatClick }) => {
             >
               <button
                 onClick={() => setSelectedProduct(null)}
-                className="absolute top-6 right-6 z-[120] bg-white p-4 rounded-full text-palapa-rose shadow-xl border border-palapa-rose/5"
+                className="absolute top-6 right-6 z-[120] bg-white p-4 rounded-full text-palapa-rose shadow-xl hover:scale-110 transition-transform"
               >
                 <X size={24} />
               </button>
 
-              <div className="flex-1 overflow-y-auto flex flex-col lg:flex-row">
-                <div className="w-full lg:w-1/2 bg-white p-4 md:p-14 flex flex-col gap-8 shrink-0">
-                  <div className="relative rounded-[2.5rem] lg:rounded-[4rem] overflow-hidden shadow-2xl bg-[#FAF5F6] aspect-square shrink-0 border-[10px] lg:border-[15px] border-[#FAF5F6]">
+              <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
+                {/* MEDIA SECTION */}
+                <div className="w-full lg:w-1/2 bg-white p-4 md:p-14 flex flex-col gap-8 shrink-0 lg:h-full lg:justify-center">
+                  <div
+                    className="relative rounded-[2.5rem] lg:rounded-[4rem] overflow-hidden shadow-2xl bg-[#FAF5F6] aspect-square border-[10px] lg:border-[15px] border-[#FAF5F6] cursor-zoom-in group"
+                    onClick={() => setIsLightboxOpen(true)}
+                  >
+                    {/* PETUNJUK "LIHAT GAMBAR LEBIH JELAS" - SELALU MUNCUL */}
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                      <motion.div
+                        initial={{ y: 10, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        className="bg-white/80 backdrop-blur-md px-5 py-2 rounded-full shadow-lg border border-white/20 flex items-center gap-2"
+                      >
+                        <Maximize2 size={12} className="text-palapa-rose" />
+                        <span className="text-[9px] md:text-[10px] font-black text-palapa-rose uppercase tracking-widest whitespace-nowrap">
+                          Lihat gambar lebih jelas
+                        </span>
+                      </motion.div>
+                    </div>
+
                     <AnimatePresence mode="wait">
-                      {/* --- PERBAIKAN 2: Guard Clause urlFor --- */}
-                      {allImages.length > 0 && allImages[activeIndex] && (
+                      {allImages.length > 0 && (
                         <motion.img
                           key={activeIndex}
-                          initial={{ opacity: 0.8 }}
+                          initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           src={urlFor(allImages[activeIndex]).width(1200).url()}
                           className="w-full h-full object-cover"
                         />
                       )}
                     </AnimatePresence>
+
                     {allImages.length > 1 && (
                       <>
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveIndex(
-                              (prev) =>
-                                (prev - 1 + allImages.length) %
-                                allImages.length,
-                            );
-                          }}
+                          onClick={prevImage}
                           className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full text-palapa-rose shadow-xl z-10"
                         >
                           <ChevronLeft size={20} />
                         </button>
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveIndex(
-                              (prev) => (prev + 1) % allImages.length,
-                            );
-                          }}
+                          onClick={nextImage}
                           className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full text-palapa-rose shadow-xl z-10"
                         >
                           <ChevronRight size={20} />
@@ -363,7 +356,6 @@ const Catalog = ({ onChatClick }) => {
                     )}
                   </div>
 
-                  {/* --- PERBAIKAN 3: Hanya munculkan thumbnail jika ada lebih dari 1 foto --- */}
                   {allImages.length > 1 && (
                     <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide px-1 shrink-0">
                       {allImages.map((img, idx) => (
@@ -373,7 +365,7 @@ const Catalog = ({ onChatClick }) => {
                           className={`relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 rounded-[1.5rem] md:rounded-[2rem] overflow-hidden transition-all ${idx === activeIndex ? "ring-4 ring-palapa-rose scale-105" : "opacity-40"}`}
                         >
                           <img
-                            src={img ? urlFor(img).width(200).url() : ""}
+                            src={urlFor(img).width(200).url()}
                             className="w-full h-full object-cover"
                           />
                         </button>
@@ -382,16 +374,17 @@ const Catalog = ({ onChatClick }) => {
                   )}
                 </div>
 
-                <div className="w-full lg:w-1/2 flex flex-col bg-[#FAF5F6]">
-                  <div className="p-8 lg:p-20 pb-8 lg:pb-12">
-                    <div className="flex flex-col gap-6">
+                {/* CONTENT SECTION */}
+                <div className="w-full lg:w-1/2 flex flex-col bg-[#FAF5F6] lg:overflow-y-auto">
+                  <div className="p-8 lg:p-20 pb-12">
+                    <div className="flex flex-col gap-8">
                       <div className="space-y-4">
                         <div className="flex justify-between items-start gap-4">
                           <div className="space-y-2">
                             <span className="inline-block px-4 py-1 rounded-full bg-palapa-rose/10 text-[9px] font-black text-palapa-rose uppercase tracking-[0.2em]">
                               {selectedProduct.categoryName}
                             </span>
-                            <h2 className="text-3xl lg:text-8xl font-[900] text-palapa-rose leading-[0.9] uppercase tracking-tighter">
+                            <h2 className="text-3xl lg:text-7xl xl:text-8xl font-[900] text-palapa-rose leading-[0.9] uppercase tracking-tighter">
                               {selectedProduct.name}
                             </h2>
                           </div>
@@ -399,29 +392,26 @@ const Catalog = ({ onChatClick }) => {
                             <span className="text-[10px] font-black text-palapa-rose/40 uppercase block tracking-widest">
                               Harga
                             </span>
-                            <p className="text-2xl font-[900] text-palapa-rose leading-none whitespace-nowrap">
+                            <p className="text-2xl font-[900] text-palapa-rose whitespace-nowrap">
                               {formatPrice(selectedProduct.price)}
                             </p>
                           </div>
                         </div>
-
                         <div className="hidden lg:block space-y-2 pt-6">
                           <span className="text-[11px] font-black text-palapa-rose/40 uppercase block tracking-[0.4em]">
                             Investasi Keindahan
                           </span>
-                          <p className="text-5xl lg:text-7xl font-[900] text-palapa-rose leading-none">
+                          <p className="text-5xl lg:text-7xl font-[900] text-palapa-rose">
                             {formatPrice(selectedProduct.price)}
                           </p>
                         </div>
                       </div>
-
                       <div className="h-px w-full bg-palapa-rose/10 border-dashed border-t"></div>
-
                       <div className="space-y-4">
                         <span className="text-[10px] font-black text-palapa-rose/40 uppercase block tracking-widest">
                           Tentang Produk
                         </span>
-                        <p className="text-palapa-rose/70 leading-relaxed text-sm lg:text-lg font-medium italic tracking-wide">
+                        <p className="text-palapa-rose/70 leading-relaxed text-sm lg:text-lg font-medium italic tracking-wide whitespace-pre-line">
                           {selectedProduct.description}
                         </p>
                       </div>
@@ -430,19 +420,61 @@ const Catalog = ({ onChatClick }) => {
                 </div>
               </div>
 
-              <div className="bg-white/40 backdrop-blur-md border-t border-palapa-rose/5 p-6 lg:p-14 flex flex-wrap items-center justify-between gap-6 shrink-0">
+              <div className="bg-white/40 backdrop-blur-md border-t border-palapa-rose/5 p-6 lg:p-14 shrink-0 z-[130]">
                 <button
                   onClick={() =>
                     onChatClick(
                       `Halo Palapa Bouquet, saya ingin pesan ${selectedProduct.name}`,
                     )
                   }
-                  className="w-full py-5 bg-palapa-rose text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.5em] shadow-2xl shadow-palapa-rose/30 hover:-translate-y-1 transition-all flex items-center justify-center gap-4"
+                  className="w-full py-5 bg-palapa-rose text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.5em] shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-4"
                 >
                   <ShoppingBag size={20} /> Pesan Sekarang
                 </button>
               </div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* --- LIGHTBOX ZOOM DENGAN NAVIGASI --- */}
+      <AnimatePresence>
+        {isLightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[10001] bg-black/95 flex items-center justify-center p-4 cursor-zoom-out"
+            onClick={() => setIsLightboxOpen(false)}
+          >
+            <button
+              onClick={prevImage}
+              className="absolute left-4 md:left-10 text-white/50 hover:text-white transition-colors z-[10002]"
+            >
+              <ChevronLeft size={48} />
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-4 md:right-10 text-white/50 hover:text-white transition-colors z-[10002]"
+            >
+              <ChevronRight size={48} />
+            </button>
+            <button className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[10002]">
+              <X size={40} />
+            </button>
+
+            <motion.img
+              key={activeIndex}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              src={urlFor(allImages[activeIndex]).width(1600).url()}
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl pointer-events-none"
+            />
+
+            <p className="absolute bottom-8 text-white/40 font-black text-[10px] uppercase tracking-[0.6em]">
+              {activeIndex + 1} / {allImages.length}
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
