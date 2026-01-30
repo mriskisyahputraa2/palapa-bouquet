@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 
 // Import Asset
 import slide1 from "../assets/bunga/bc-1.webp";
+import slide1Mobile from "../assets/bunga/bcp-1.webp";
 import slide2 from "../assets/bunga/bc-2.webp";
 import slide3 from "../assets/bunga/bc-3.webp";
 import waIcon from "../assets/whatsapp.png"; // Pastikan path asset benar
@@ -17,7 +18,7 @@ const HeroCarousel = ({ onChatClick }) => {
   const slides = [
     {
       id: 1,
-      image: slide1,
+      image: { desktop: slide1, mobile: slide1Mobile },
       subtitle: "Handcrafted Artisan Bouquet",
       title: "Abadikan\nMomen Tanpa\nLayu",
       desc: "Buket premium buatan tangan yang dirancang khusus untuk wisuda dan pernikahan. Keindahan yang tetap sempurna selamanya.",
@@ -54,11 +55,29 @@ const HeroCarousel = ({ onChatClick }) => {
         {slides.map((slide) => (
           <SwiperSlide key={slide.id} className="relative h-full w-full">
             <div className="absolute inset-0 w-full h-full">
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className="w-full h-full object-cover"
-              />
+              {typeof slide.image === "object" ? (
+                <picture>
+                  <source
+                    media="(max-width: 767px)"
+                    srcSet={slide.image.mobile}
+                  />
+                  <source
+                    media="(min-width: 768px)"
+                    srcSet={slide.image.desktop}
+                  />
+                  <img
+                    src={slide.image.desktop}
+                    alt={slide.title}
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
+              ) : (
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="w-full h-full object-cover"
+                />
+              )}
               <div className="absolute inset-0 bg-black/50 md:bg-gradient-to-r md:from-black/70 md:to-transparent"></div>
             </div>
 
