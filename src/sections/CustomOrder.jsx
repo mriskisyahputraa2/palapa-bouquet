@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Palette, Coins, Gift, MessageCircle } from "lucide-react";
-import customImg from "../assets/bunga/b-3.webp";
+import customImg from "../assets/bunga/b-8.webp";
 
 const CustomOrder = ({ onChatClick }) => {
   const features = [
