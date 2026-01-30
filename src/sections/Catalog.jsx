@@ -27,7 +27,6 @@ const Catalog = ({ onChatClick }) => {
   const [lastIndex, setLastIndex] = useState(ITEMS_PER_PAGE);
   const [hasMore, setHasMore] = useState(true);
 
-  // 1. LOGIKA DEBOUNCING
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(searchQuery);
@@ -35,7 +34,6 @@ const Catalog = ({ onChatClick }) => {
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
-  // 2. AMBIL KATEGORI
   useEffect(() => {
     const categoryQuery = `*[_type == "category"] | order(title asc)`;
     client.fetch(categoryQuery).then((data) => {
@@ -44,7 +42,6 @@ const Catalog = ({ onChatClick }) => {
     });
   }, []);
 
-  // 3. FETCH PRODUK (Server-side)
   const fetchProducts = useCallback(
     async (isNewFilter = false) => {
       if (isNewFilter) setLoading(true);
@@ -108,8 +105,11 @@ const Catalog = ({ onChatClick }) => {
     }).format(clean);
   };
 
+  // --- PERBAIKAN 1: Filter foto agar tidak ada undefined ---
   const allImages = selectedProduct
-    ? [selectedProduct.mainImage, ...(selectedProduct.gallery || [])]
+    ? [selectedProduct.mainImage, ...(selectedProduct.gallery || [])].filter(
+        Boolean,
+      )
     : [];
 
   if (loading)
@@ -124,7 +124,6 @@ const Catalog = ({ onChatClick }) => {
       id="katalog"
       className="py-24 md:py-32 bg-[#FAF5F6] font-poppins overflow-hidden relative"
     >
-      {/* DEKORASI TEKS LATAR BELAKANG (Sama dengan Gallery) */}
       <div className="absolute top-24 right-0 w-full pointer-events-none opacity-[0.02] select-none text-right">
         <h2 className="text-[22vw] font-black leading-none text-palapa-rose whitespace-nowrap">
           COLLECTION
@@ -132,7 +131,6 @@ const Catalog = ({ onChatClick }) => {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* HEADER SECTION - Polished for Premium Feel */}
         <div className="flex flex-col lg:flex-row justify-between items-center lg:items-end gap-8 mb-20 text-center lg:text-left">
           <div className="space-y-4">
             <div className="flex items-center justify-center lg:justify-start gap-3 text-palapa-rose">
@@ -142,7 +140,7 @@ const Catalog = ({ onChatClick }) => {
               </span>
             </div>
             <h3 className="font-[900] text-5xl sm:text-7xl md:text-9xl lg:text-[120px] text-palapa-rose leading-[0.8] uppercase tracking-tighter">
-              Koleksi <br />
+              Produk <br />
               <span className="text-palapa-rose/20 italic font-light lowercase">
                 palapa bouquet
               </span>
@@ -154,12 +152,11 @@ const Catalog = ({ onChatClick }) => {
             <p className="max-w-xs text-palapa-rose/60 text-[11px] md:text-sm leading-relaxed italic font-medium px-4 lg:px-0">
               "Keindahan abadi dalam setiap detail. Temukan koleksi buket
               eksklusif, papan akrilik modern, dan hampers kustom yang dirangkai
-              khusus untuk menyempurnakan momen berharga Anda."
+              khusus untuk menyempurnakan setiap ungkapan rasa Anda."
             </p>
           </div>
         </div>
 
-        {/* SEARCH & FILTER AREA - Search Bar di atas kiri kategori pada Desktop */}
         <div className="flex flex-col gap-8 mb-16">
           <div className="flex justify-center lg:justify-start">
             <div className="relative w-full max-w-md lg:w-96 group">
@@ -194,72 +191,96 @@ const Catalog = ({ onChatClick }) => {
           </div>
         </div>
 
-        {/* GRID PRODUK - Style Kartu Seiras Gallery */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-20">
           <AnimatePresence mode="popLayout">
-            {products.map((product, index) => (
-              <motion.div
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                key={product._id}
-                className="group flex flex-col"
-              >
-                <div
-                  className="relative aspect-[4/5] rounded-[3.5rem] lg:rounded-[4.5rem] overflow-hidden bg-white border-[10px] lg:border-[15px] border-white shadow-xl cursor-pointer transform-gpu transition-all duration-700 group-hover:shadow-2xl group-hover:-translate-y-4 group-hover:rotate-1"
-                  onClick={() => setSelectedProduct(product)}
+            {products.length > 0 ? (
+              products.map((product, index) => (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  key={product._id}
+                  className="group flex flex-col"
                 >
-                  <img
-                    src={urlFor(product.mainImage).width(800).url()}
-                    className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
-                    alt={product.name}
-                  />
-                  <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-5 py-2 rounded-full shadow-sm">
-                    <span className="text-[9px] font-black text-palapa-rose uppercase tracking-widest">
-                      {product.categoryName}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mt-10 px-4 text-center space-y-6">
                   <div
+                    className="relative aspect-[4/5] rounded-[3rem] lg:rounded-[4.5rem] overflow-hidden bg-white border-[10px] lg:border-[15px] border-white shadow-xl cursor-pointer transform-gpu transition-all duration-700 group-hover:shadow-2xl group-hover:-translate-y-4 group-hover:rotate-1"
                     onClick={() => setSelectedProduct(product)}
-                    className="cursor-pointer space-y-2"
                   >
-                    <h4 className="text-3xl font-[900] text-palapa-rose uppercase tracking-tighter leading-tight">
-                      {product.name}
-                    </h4>
-                    <p className="text-xl font-medium text-palapa-rose/40 italic">
-                      {formatPrice(product.price)}
-                    </p>
+                    <img
+                      src={
+                        product.mainImage
+                          ? urlFor(product.mainImage).width(800).url()
+                          : ""
+                      }
+                      className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
+                      alt={product.name}
+                    />
+                    <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-5 py-2 rounded-full shadow-sm">
+                      <span className="text-[9px] font-black text-palapa-rose uppercase tracking-widest">
+                        {product.categoryName}
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="flex flex-col gap-3">
-                    <button
-                      onClick={() =>
-                        onChatClick(
-                          `Halo Palapa Bouquet, saya ingin pesan ${product.name}`,
-                        )
-                      }
-                      className="w-full py-5 bg-palapa-rose text-white rounded-[1.8rem] font-black text-[10px] uppercase tracking-[0.3em] shadow-lg flex items-center justify-center gap-3 transition-all hover:bg-palapa-rose/90 active:scale-95"
-                    >
-                      <ShoppingBag size={16} /> Pesan Sekarang
-                    </button>
-                    <button
+                  <div className="mt-10 px-4 text-center space-y-6">
+                    <div
                       onClick={() => setSelectedProduct(product)}
-                      className="w-full py-5 border-2 border-palapa-rose/10 text-palapa-rose rounded-[1.8rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-white transition-all"
+                      className="cursor-pointer space-y-2"
                     >
-                      <Eye size={16} /> Lihat Detail
-                    </button>
+                      <h4 className="text-3xl font-[900] text-palapa-rose uppercase tracking-tighter leading-tight">
+                        {product.name}
+                      </h4>
+                      <p className="text-xl font-medium text-palapa-rose/40 italic">
+                        {formatPrice(product.price)}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      <button
+                        onClick={() =>
+                          onChatClick(
+                            `Halo Palapa Bouquet, saya ingin pesan ${product.name}`,
+                          )
+                        }
+                        className="w-full py-5 bg-palapa-rose text-white rounded-[1.8rem] font-black text-[10px] uppercase tracking-[0.3em] shadow-lg flex items-center justify-center gap-3 transition-all hover:bg-palapa-rose/90 active:scale-95"
+                      >
+                        <ShoppingBag size={16} /> Pesan Sekarang
+                      </button>
+                      <button
+                        onClick={() => setSelectedProduct(product)}
+                        className="w-full py-5 border-2 border-palapa-rose/10 text-palapa-rose rounded-[1.8rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-white transition-all"
+                      >
+                        <Eye size={16} /> Lihat Detail
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full py-20 text-center">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-4"
+                >
+                  <div className="text-palapa-rose/10 flex justify-center">
+                    <ShoppingBag size={80} />
+                  </div>
+                  <h4 className="text-2xl font-black text-palapa-rose uppercase tracking-widest">
+                    {activeCategory === "Semua"
+                      ? "Produk belum tersedia"
+                      : "Kategori ini belum ada produk"}
+                  </h4>
+                  <p className="text-palapa-rose/40 italic">
+                    Silakan cek kategori lainnya atau cari kata kunci lain.
+                  </p>
+                </motion.div>
+              </div>
+            )}
           </AnimatePresence>
         </div>
 
-        {/* LOAD MORE */}
         {hasMore && products.length > 0 && (
           <div className="mt-28 text-center">
             <button
@@ -273,7 +294,6 @@ const Catalog = ({ onChatClick }) => {
         )}
       </div>
 
-      {/* --- MODAL DETAIL (Premium & Responsive) --- */}
       <AnimatePresence>
         {selectedProduct && (
           <motion.div
@@ -288,7 +308,7 @@ const Catalog = ({ onChatClick }) => {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="bg-[#FAF5F6] w-full h-[95dvh] md:h-auto md:max-h-[90dvh] max-w-7xl md:rounded-[4.5rem] shadow-2xl relative flex flex-col lg:flex-row overflow-hidden"
+              className="bg-[#FAF5F6] w-full h-[95dvh] md:h-auto md:max-h-[90dvh] max-w-7xl md:rounded-[4.5rem] shadow-2xl relative flex flex-col overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -298,100 +318,129 @@ const Catalog = ({ onChatClick }) => {
                 <X size={24} />
               </button>
 
-              {/* MEDIA */}
-              <div className="w-full lg:w-1/2 bg-white p-6 lg:p-14 overflow-y-auto flex flex-col gap-8">
-                <div className="relative rounded-[3rem] lg:rounded-[4rem] overflow-hidden shadow-2xl bg-[#FAF5F6] aspect-square shrink-0 border-[10px] lg:border-[15px] border-[#FAF5F6]">
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={activeIndex}
-                      initial={{ opacity: 0.8 }}
-                      animate={{ opacity: 1 }}
-                      src={urlFor(allImages[activeIndex]).width(1200).url()}
-                      className="w-full h-full object-cover"
-                    />
-                  </AnimatePresence>
+              <div className="flex-1 overflow-y-auto flex flex-col lg:flex-row">
+                <div className="w-full lg:w-1/2 bg-white p-4 md:p-14 flex flex-col gap-8 shrink-0">
+                  <div className="relative rounded-[2.5rem] lg:rounded-[4rem] overflow-hidden shadow-2xl bg-[#FAF5F6] aspect-square shrink-0 border-[10px] lg:border-[15px] border-[#FAF5F6]">
+                    <AnimatePresence mode="wait">
+                      {/* --- PERBAIKAN 2: Guard Clause urlFor --- */}
+                      {allImages.length > 0 && allImages[activeIndex] && (
+                        <motion.img
+                          key={activeIndex}
+                          initial={{ opacity: 0.8 }}
+                          animate={{ opacity: 1 }}
+                          src={urlFor(allImages[activeIndex]).width(1200).url()}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </AnimatePresence>
+                    {allImages.length > 1 && (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveIndex(
+                              (prev) =>
+                                (prev - 1 + allImages.length) %
+                                allImages.length,
+                            );
+                          }}
+                          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full text-palapa-rose shadow-xl z-10"
+                        >
+                          <ChevronLeft size={20} />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveIndex(
+                              (prev) => (prev + 1) % allImages.length,
+                            );
+                          }}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full text-palapa-rose shadow-xl z-10"
+                        >
+                          <ChevronRight size={20} />
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* --- PERBAIKAN 3: Hanya munculkan thumbnail jika ada lebih dari 1 foto --- */}
                   {allImages.length > 1 && (
-                    <>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveIndex(
-                            (prev) =>
-                              (prev - 1 + allImages.length) % allImages.length,
-                          );
-                        }}
-                        className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/90 p-4 rounded-full text-palapa-rose shadow-xl z-10"
-                      >
-                        <ChevronLeft size={24} />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveIndex(
-                            (prev) => (prev + 1) % allImages.length,
-                          );
-                        }}
-                        className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/90 p-4 rounded-full text-palapa-rose shadow-xl z-10"
-                      >
-                        <ChevronRight size={24} />
-                      </button>
-                    </>
+                    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide px-1 shrink-0">
+                      {allImages.map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setActiveIndex(idx)}
+                          className={`relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 rounded-[1.5rem] md:rounded-[2rem] overflow-hidden transition-all ${idx === activeIndex ? "ring-4 ring-palapa-rose scale-105" : "opacity-40"}`}
+                        >
+                          <img
+                            src={img ? urlFor(img).width(200).url() : ""}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
                   )}
                 </div>
-                <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide px-1 shrink-0">
-                  {allImages.map((img, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setActiveIndex(idx)}
-                      className={`relative w-24 h-24 lg:w-32 lg:h-32 flex-shrink-0 rounded-[2rem] lg:rounded-[3rem] overflow-hidden transition-all ${idx === activeIndex ? "ring-4 ring-palapa-rose scale-110 shadow-lg" : "opacity-40"}`}
-                    >
-                      <img
-                        src={urlFor(img).width(200).url()}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
 
-              {/* CONTENT */}
-              <div className="w-full lg:w-1/2 flex flex-col bg-[#FAF5F6] overflow-hidden">
-                <div className="flex-1 p-10 lg:p-20 overflow-y-auto pb-40 lg:pb-12">
-                  <div className="space-y-10">
-                    <div className="space-y-4">
-                      <span className="inline-block px-6 py-2 rounded-full bg-palapa-rose/10 text-[10px] font-black text-palapa-rose uppercase tracking-[0.3em]">
-                        {selectedProduct.categoryName}
-                      </span>
-                      <h2 className="text-5xl lg:text-8xl font-[900] text-palapa-rose leading-[0.8] uppercase tracking-tighter">
-                        {selectedProduct.name}
-                      </h2>
-                    </div>
-                    <div className="h-px w-full bg-palapa-rose/10 border-dashed border-t"></div>
-                    <p className="text-palapa-rose/70 leading-relaxed text-sm lg:text-lg font-medium italic italic tracking-wide">
-                      {selectedProduct.description}
-                    </p>
-                    <div className="space-y-2">
-                      <span className="text-[11px] font-black text-palapa-rose/40 uppercase block tracking-[0.4em]">
-                        Investasi Keindahan
-                      </span>
-                      <p className="text-5xl lg:text-7xl font-[900] text-palapa-rose leading-none">
-                        {formatPrice(selectedProduct.price)}
-                      </p>
+                <div className="w-full lg:w-1/2 flex flex-col bg-[#FAF5F6]">
+                  <div className="p-8 lg:p-20 pb-8 lg:pb-12">
+                    <div className="flex flex-col gap-6">
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-start gap-4">
+                          <div className="space-y-2">
+                            <span className="inline-block px-4 py-1 rounded-full bg-palapa-rose/10 text-[9px] font-black text-palapa-rose uppercase tracking-[0.2em]">
+                              {selectedProduct.categoryName}
+                            </span>
+                            <h2 className="text-3xl lg:text-8xl font-[900] text-palapa-rose leading-[0.9] uppercase tracking-tighter">
+                              {selectedProduct.name}
+                            </h2>
+                          </div>
+                          <div className="text-right lg:hidden">
+                            <span className="text-[10px] font-black text-palapa-rose/40 uppercase block tracking-widest">
+                              Harga
+                            </span>
+                            <p className="text-2xl font-[900] text-palapa-rose leading-none whitespace-nowrap">
+                              {formatPrice(selectedProduct.price)}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="hidden lg:block space-y-2 pt-6">
+                          <span className="text-[11px] font-black text-palapa-rose/40 uppercase block tracking-[0.4em]">
+                            Investasi Keindahan
+                          </span>
+                          <p className="text-5xl lg:text-7xl font-[900] text-palapa-rose leading-none">
+                            {formatPrice(selectedProduct.price)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="h-px w-full bg-palapa-rose/10 border-dashed border-t"></div>
+
+                      <div className="space-y-4">
+                        <span className="text-[10px] font-black text-palapa-rose/40 uppercase block tracking-widest">
+                          Tentang Produk
+                        </span>
+                        <p className="text-palapa-rose/70 leading-relaxed text-sm lg:text-lg font-medium italic tracking-wide">
+                          {selectedProduct.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="mt-auto bg-white/40 backdrop-blur-md border-t border-palapa-rose/5 p-8 lg:p-14 flex flex-wrap items-center justify-between gap-6 sticky bottom-0 z-10 lg:static">
-                  <button
-                    onClick={() =>
-                      onChatClick(
-                        `Halo Palapa Bouquet, saya ingin pesan ${selectedProduct.name}`,
-                      )
-                    }
-                    className="w-full py-6 bg-palapa-rose text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.5em] shadow-2xl shadow-palapa-rose/30 hover:-translate-y-1 transition-all flex items-center justify-center gap-4"
-                  >
-                    <ShoppingBag size={20} /> Pesan Sekarang
-                  </button>
-                </div>
+              </div>
+
+              <div className="bg-white/40 backdrop-blur-md border-t border-palapa-rose/5 p-6 lg:p-14 flex flex-wrap items-center justify-between gap-6 shrink-0">
+                <button
+                  onClick={() =>
+                    onChatClick(
+                      `Halo Palapa Bouquet, saya ingin pesan ${selectedProduct.name}`,
+                    )
+                  }
+                  className="w-full py-5 bg-palapa-rose text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.5em] shadow-2xl shadow-palapa-rose/30 hover:-translate-y-1 transition-all flex items-center justify-center gap-4"
+                >
+                  <ShoppingBag size={20} /> Pesan Sekarang
+                </button>
               </div>
             </motion.div>
           </motion.div>

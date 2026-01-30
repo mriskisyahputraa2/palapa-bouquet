@@ -11,7 +11,7 @@ import "swiper/css/pagination";
 import slide1 from "../assets/bunga/bc-1.webp";
 import slide1Mobile from "../assets/bunga/bcp-1.webp";
 import slide2 from "../assets/bunga/bc-2.webp";
-import slide3 from "../assets/bunga/bc-3.webp";
+import slide3 from "../assets/bunga/bc-4.webp";
 import waIcon from "../assets/whatsapp.png"; // Pastikan path asset benar
 
 const HeroCarousel = ({ onChatClick }) => {
