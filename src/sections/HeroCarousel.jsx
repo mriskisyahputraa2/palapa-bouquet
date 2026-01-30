@@ -8,7 +8,7 @@ import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 
 // Import Asset
-import slide1 from "../assets/hero2.webp";
+import slide1 from "../assets/bunga1.png";
 import slide2 from "../assets/hero1.webp";
 import slide3 from "../assets/hero3.webp";
 import waIcon from "../assets/whatsapp.png"; // Pastikan path asset benar
