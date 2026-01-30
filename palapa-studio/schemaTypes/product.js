@@ -4,6 +4,13 @@ export default {
   type: 'document',
   fields: [
     {
+      name: 'category',
+      title: 'Kategori',
+      type: 'reference', // UBAH dari 'string' menjadi 'reference'
+      to: [{type: 'category'}], // Hubungkan ke skema 'category' yang sudah kamu buat
+      validation: (Rule) => Rule.required(),
+    },
+    {
       name: 'name',
       title: 'Nama Produk',
       type: 'string',
@@ -39,19 +46,6 @@ export default {
       name: 'description',
       title: 'Deskripsi Produk',
       type: 'text',
-    },
-    {
-      name: 'category',
-      title: 'Kategori',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Wisuda', value: 'wisuda'},
-          {title: 'Wedding', value: 'wedding'},
-          {title: 'Anniversary', value: 'anniversary'},
-          {title: 'Custom', value: 'custom'},
-        ],
-      },
     },
   ],
 }
